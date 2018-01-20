@@ -11,11 +11,21 @@ public class MineSweeperBoardFactory {
 
     private int mineCount;
 
-    private static final double DEFAULT_PERCENT_MINES = .1;
+    private static final double DEFAULT_PERCENT_MINES = .20;
 
     public MineSweeperBoardFactory(int size, double mineDensityPercent, long seed) {
         this.board =
                 createBoard(size, seed, mineDensityPercent);
+    }
+
+    public MineSweeperBoardFactory(int size, double mineDensityPercent) {
+        this.board =
+                createBoard(size, System.currentTimeMillis(), DEFAULT_PERCENT_MINES);
+    }
+
+    public MineSweeperBoardFactory(int size) {
+        this.board =
+                createBoard(size, System.currentTimeMillis(), DEFAULT_PERCENT_MINES);
     }
 
     public List<List<MineSquare>> build() {
@@ -32,16 +42,6 @@ public class MineSweeperBoardFactory {
 
     public int getMineCount() {
         return mineCount;
-    }
-
-    public MineSweeperBoardFactory(int size, double mineDensityPercent) {
-        this.board =
-                createBoard(size, System.currentTimeMillis(), DEFAULT_PERCENT_MINES);
-    }
-
-    public MineSweeperBoardFactory(int size) {
-        this.board =
-                createBoard(size, System.currentTimeMillis(), DEFAULT_PERCENT_MINES);
     }
 
     int[][] createBoard(int size, long seed, double mineDensityPercent) {
@@ -78,7 +78,7 @@ public class MineSweeperBoardFactory {
      */
     int[][] initializeBoard(int size, long seed, double mineDensity) {
         Random r = new Random(seed);
-        int[][] retBoard = new int[size + 1][size + 1];
+        int[][] retBoard = new int[size + 2][size + 2];
         int bound = (int) (mineDensity * 100);
         for (int i = 1; i < retBoard.length - 1; i++) {
             int[] row = retBoard[i];

@@ -65,41 +65,50 @@ public class MineSweeperBoard {
         }
     }
 
-    private void revealSurrounding(int x, int y) {
+    public State revealSurrounding(int x, int y) {
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 try {
-                    guess(x + k, y + l);
+                    State newState = guess(x + k, y + l);
+                    if(State.PLAYING != newState) return newState;
                 } catch (IllegalArgumentException e) {
                     //do nothing, we don't want to reveal the edges
                 }
             }
         }
+        return State.PLAYING;
+    }
+
+    public static <E> String padRight(E s, int n) {
+        return String.format("%1$-" + n + "s", s);
     }
 
     public String printBoard() {
         StringBuilder header = new StringBuilder("   "); // one for number, one for edge
         StringBuilder rows = new StringBuilder();
-        int maxSize = String.valueOf(board.size()).length();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < maxSize; i ++){
-            sb.append(" ");
-        }
+        int padSize = String.valueOf(board.size()).length() + 1;
         for (int i = 0; i < board.size(); i++) {
-
-            header.append(i).append(sb);
+            if(i > 0 && i < board.size() -1) {
+                header.append(padRight(i, padSize));
+                rows.append(padRight(i, padSize));
+            } else {
+                header.append(padRight("", padSize));
+                rows.append(padRight("", padSize));
+            }
 
             List<MineSquare> row = board.get(i);
 
-            rows.append(i).append(sb);
-
             for (int j = 0; j < board.get(i).size(); j++) {
-                rows.append(row.get(j).toString()).append(sb);
+                rows.append(padRight(row.get(j),padSize));
             }
-            rows.append("x").append("\n");
+            if(i > 0 && i < board.size() -1) {
+                rows.append(padRight(i, padSize));
+            }
+            rows.append("\n");
         }
-        header.append("\n").append(rows);
-        return header.toString();
+        StringBuilder finalOutput = new StringBuilder(header);
+        finalOutput.append("\n").append(rows).append(header);
+        return finalOutput.toString();
     }
 
 }
