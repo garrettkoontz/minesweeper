@@ -90,6 +90,10 @@ public class MineSweeperBoardFactory {
                 }
             }
         }
+//        if(retBoard[yGuess][xGuess] == -1) {
+//            retBoard[yGuess][xGuess] = 0;
+//            mineCount--;
+//        }
         return retBoard;
     }
 

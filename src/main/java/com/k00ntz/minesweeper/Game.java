@@ -10,8 +10,6 @@ public class Game {
 
     private Scanner scanner = new Scanner(System.in);
 
-    private MineSweeperBoard mineSweeperBoard;
-
     private Guess nextGuess() {
         String guess = scanner.nextLine();
         return new Guess(guess.split(" "));
@@ -33,24 +31,17 @@ public class Game {
             Guess g = null;
             try {
                 g = nextGuess();
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 if (blankEntry) {
                     quitFlag = true;
                 } else {
                     blankEntry = true;
                 }
+                continue;
             }
-            if (!board.validationXY(g.getX(), g.getY())) {
-                System.out.println("Invalid x or y coordinate, please try again.");
-            } else {
-                if (g.isFlag()) {
-                    st = board.flag(g.getX(), g.getY());
-                } else if (g.isChord()) {
-                    st = board.revealSurrounding(g.getX(), g.getY());
-                } else {
-                    st = board.guess(g.getX(), g.getY());
-                }
-            }
+            int x = g.getX();
+            int y = g.getY();
+            st = makeGuess(board, x, y, g);
             printBoard(board);
         }
         if (st == MineSweeperBoard.State.WON) {
@@ -58,8 +49,30 @@ public class Game {
         } else {
             System.out.println("Sorry, you lost.");
         }
+        if(quitFlag){
+            return false;
+        }
         System.out.print("Play again? (Y/N): ");
         String playAgain = scanner.nextLine();
         return playAgain.equalsIgnoreCase("Y");
+    }
+
+    private MineSweeperBoard.State makeGuess(MineSweeperBoard board, int x, int y, Guess g){
+        MineSweeperBoard.State st = MineSweeperBoard.State.PLAYING;
+        if (!board.validationXY(x, y)) {
+            System.out.println("Invalid x or y coordinate, please try again.");
+        } else {
+
+            if (g.isFlag()) {
+                st = board.flag(x, y);
+            } else if (g.isChord() &&
+                    board.isRevealed(x, y) &&
+                    board.getSurroundingFlagsCount(x, y) == board.get(x, y).getSurroundingMineCount()) {
+                st = board.revealSurrounding(x, y);
+            } else {
+                st = board.guess(x, y);
+            }
+        }
+        return st;
     }
 }

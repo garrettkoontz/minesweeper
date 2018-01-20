@@ -24,7 +24,10 @@ public class MineSweeperBoard {
         MineSweeperBoardFactory factory = new MineSweeperBoardFactory(size);
         this.board = factory.build();
         this.mineCount = factory.getMineCount();
+    }
 
+    public boolean isRevealed(int x, int y) {
+        return board.get(y).get(x).isRevealed();
     }
 
     public boolean validationXY(int x, int y) {
@@ -70,13 +73,27 @@ public class MineSweeperBoard {
             for (int l = -1; l < 2; l++) {
                 try {
                     State newState = guess(x + k, y + l);
-                    if(State.PLAYING != newState) return newState;
+                    if (State.PLAYING != newState) return newState;
                 } catch (IllegalArgumentException e) {
                     //do nothing, we don't want to reveal the edges
                 }
             }
         }
         return State.PLAYING;
+    }
+
+    public MineSquare get(int x, int y){
+        return board.get(y).get(x);
+    }
+
+    public int getSurroundingFlagsCount(int x, int y){
+        int cnt = 0;
+        for (int k = -1; k < 2; k++) {
+            for (int l = -1; l < 2; l++) {
+                if (board.get(y).get(x).isFlagged()) cnt++;
+            }
+        }
+        return cnt;
     }
 
     public static <E> String padRight(E s, int n) {
@@ -88,7 +105,7 @@ public class MineSweeperBoard {
         StringBuilder rows = new StringBuilder();
         int padSize = String.valueOf(board.size()).length() + 1;
         for (int i = 0; i < board.size(); i++) {
-            if(i > 0 && i < board.size() -1) {
+            if (i > 0 && i < board.size() - 1) {
                 header.append(padRight(i, padSize));
                 rows.append(padRight(i, padSize));
             } else {
@@ -99,9 +116,9 @@ public class MineSweeperBoard {
             List<MineSquare> row = board.get(i);
 
             for (int j = 0; j < board.get(i).size(); j++) {
-                rows.append(padRight(row.get(j),padSize));
+                rows.append(padRight(row.get(j), padSize));
             }
-            if(i > 0 && i < board.size() -1) {
+            if (i > 0 && i < board.size() - 1) {
                 rows.append(padRight(i, padSize));
             }
             rows.append("\n");
