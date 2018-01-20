@@ -1,5 +1,6 @@
 package com.k00ntz.minesweeper;
 
+import com.k00ntz.minesweeper.board.MineSquare;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package com.k00ntz.minesweeper;
+package com.k00ntz.minesweeper.board;
 
 public class MineSquare {
 
