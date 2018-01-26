@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class MineSweeperBoard {
 
-    private final List<List<MineSquare>> board;
+    private final List<List<MSquare>> board;
 
     private final int mineCount;
 
@@ -48,7 +48,7 @@ public class MineSweeperBoard {
             throw new IllegalArgumentException(
                     String.format("Invalid x y combo, x %s and/or y %s out of range %s", x, y, board.size()));
         }
-        MineSquare guessSquare = board.get(y).get(x);
+        MSquare guessSquare = board.get(y).get(x);
         if (!guessSquare.isRevealed() && !guessSquare.isFlagged()) {
             if (guessSquare.reveal()) {
                 state = State.LOST;
@@ -82,7 +82,7 @@ public class MineSweeperBoard {
         return State.PLAYING;
     }
 
-    public MineSquare get(int x, int y){
+    public MSquare get(int x, int y){
         return board.get(y).get(x);
     }
 
@@ -90,7 +90,8 @@ public class MineSweeperBoard {
         int cnt = 0;
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
-                if (board.get(y).get(x).isFlagged()) cnt++;
+                if (board.get(y + k).get(x + l).isFlagged())
+                    cnt++;
             }
         }
         return cnt;
@@ -113,7 +114,7 @@ public class MineSweeperBoard {
                 rows.append(padRight("", padSize));
             }
 
-            List<MineSquare> row = board.get(i);
+            List<MSquare> row = board.get(i);
 
             for (int j = 0; j < board.get(i).size(); j++) {
                 rows.append(padRight(row.get(j), padSize));

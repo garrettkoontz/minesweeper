@@ -1,6 +1,7 @@
 package com.k00ntz.minesweeper.board;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -28,15 +29,19 @@ public class MineSweeperBoardFactory {
                 createBoard(size, System.currentTimeMillis(), DEFAULT_PERCENT_MINES);
     }
 
-    public List<List<MineSquare>> build() {
-        List<List<MineSquare>> mineBoard = new ArrayList<>();
-        for (int i = 0; i < board.length; i++) {
-            List<MineSquare> row = new ArrayList<>();
-            for (int j = 0; j < board[i].length; j++) {
+    public List<List<MSquare>> build() {
+        List<List<MSquare>> mineBoard = new ArrayList<>();
+        mineBoard.add(Collections.<MSquare>nCopies(board.length, EdgeSquare.HORIZONTAL));
+        for (int i = 1; i < board.length - 1; i++) {
+            List<MSquare> row = new ArrayList<>();
+            row.add(EdgeSquare.VERTICAL);
+            for (int j = 1; j < board[i].length - 1; j++) {
                 row.add(new MineSquare(board[i][j]));
             }
+            row.add(EdgeSquare.VERTICAL);
             mineBoard.add(row);
         }
+        mineBoard.add(Collections.<MSquare>nCopies(board.length, EdgeSquare.HORIZONTAL));
         return mineBoard;
     }
 

@@ -7,7 +7,7 @@ public class Guess{
     private int y;
 
     public Guess(String[] guess){
-        if(guess.length < 2) throw new IllegalArgumentException();
+        if(guess.length < 2) throw new IllegalArgumentException("Not enough args: need at least two.");
         if(guess.length > 2){
             this.flag = guess[0].equalsIgnoreCase("F");
             this.chord = guess[0].equalsIgnoreCase("C");

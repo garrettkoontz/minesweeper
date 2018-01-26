@@ -9,7 +9,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int size = scanner.nextInt();
         Game game = new Game();
-        if(game.playGame(size, System.currentTimeMillis(), .1)){
+        if(game.playGame(size)){
             Main.main(args);
         }
     }

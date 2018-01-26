@@ -1,6 +1,6 @@
 package com.k00ntz.minesweeper.board;
 
-public class MineSquare {
+public class MineSquare implements MSquare {
 
     private final boolean isMine;
     private final int surroundingMineCount;
@@ -14,27 +14,33 @@ public class MineSquare {
         this.isFlagged = false;
     }
 
+    @Override
     public boolean isRevealed() {
         return isRevealed;
     }
 
+    @Override
     public boolean isFlagged() {
         return isFlagged;
     }
 
+    @Override
     public boolean isMine() {
         return isMine;
     }
 
+    @Override
     public int getSurroundingMineCount() {
         return surroundingMineCount;
     }
 
+    @Override
     public boolean reveal() {
         this.isRevealed = true;
         return isMine;
     }
 
+    @Override
     public void setFlagged() {
         this.isFlagged = !this.isFlagged;
     }

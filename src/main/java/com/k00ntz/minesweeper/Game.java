@@ -19,7 +19,7 @@ public class Game {
         System.out.println(mineSweeperBoard.printBoard());
     }
 
-    public boolean playGame(int size, long seed, double mineDensity) {
+    public boolean playGame(int size) {
         MineSweeperBoard board = new MineSweeperBoard(size);
         System.out.println(DIRECTIONS);
         printBoard(board);
@@ -28,7 +28,7 @@ public class Game {
         MineSweeperBoard.State st = MineSweeperBoard.State.PLAYING;
         while (!quitFlag && st == MineSweeperBoard.State.PLAYING) {
             System.out.print("Please guess an x and y coordinate as safe, or flag a bomb: ");
-            Guess g = null;
+            Guess g;
             try {
                 g = nextGuess();
             } catch (IllegalArgumentException | NullPointerException e) {
@@ -65,10 +65,11 @@ public class Game {
 
             if (g.isFlag()) {
                 st = board.flag(x, y);
-            } else if (g.isChord() &&
-                    board.isRevealed(x, y) &&
+            } else if (g.isChord()){
+                if(board.isRevealed(x, y) &&
                     board.getSurroundingFlagsCount(x, y) == board.get(x, y).getSurroundingMineCount()) {
-                st = board.revealSurrounding(x, y);
+                    st = board.revealSurrounding(x, y);
+                }
             } else {
                 st = board.guess(x, y);
             }
